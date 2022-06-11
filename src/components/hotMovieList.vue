@@ -1,7 +1,7 @@
 <template>
             <div class="bg-white mt-[5px]">
-                <div class="flex h-[90px] p-[5px]" v-for="item in resultData.listData" :key="item.id">
-                    <div class="w-[75px]">
+                <div class="flex h-[120px] p-[5px]" v-for="item in resultData.listData" :key="item.id">
+                    <div class="w-[95px]">
                         <img class="w-full h-full" :src="baseURL+item.movie_pc" alt="">
                     </div>
                     <ul class="flex flex-col flex-1 justify-between text-[12px] list-none px-[10px]">
