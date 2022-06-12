@@ -1,7 +1,7 @@
 <template>
     
         <div class="title-bar">
-            <img v-if="showBack" class="left-back" src="../assets/img/left-arrow.svg" alt="返回" />
+            <img v-if="showBack" class="left-back" src="../assets/img/left-arrow.svg" @click="$router.back()" alt="返回" />
             <slot></slot>
             <div class="right-menu-box">
                 <slot name="right"></slot>

@@ -19,6 +19,9 @@ const movieInfo ={
                 movie_name
             }
         })
+    },
+    getMovieById(id){
+        return axiosInstance.get("/movie-info/findById/"+id)
     }
 }
 

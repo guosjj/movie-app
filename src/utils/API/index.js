@@ -3,5 +3,5 @@ import hallInfo from "./hallInfo";
 
 export default {
     movieInfo,
-    hallInfo
+    hallInfo,
 }

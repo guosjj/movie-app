@@ -59,6 +59,11 @@ const router = createRouter({
             path: "/register",
             component: register,
             name: "register"
+        },
+        {
+            path: "/movieDetail",
+            component: ()=>import("../views/movieDetail.vue"),
+            name: "movieDetail"
         }
     ],
 });
