@@ -3,7 +3,17 @@
     <title-bar :show-back="true">电影排片</title-bar>
     <div class="content-box flex-1 overflow-auto">
       <!--轮播图的盒子 -->
-      <div class="swiper-box h-[150px] bg-gradient-to-tr from-gray-500 to-gray-900"></div>
+      <div class="swiper-box h-[150px] bg-gradient-to-tr from-gray-500 to-gray-900">
+          <swiper
+    :slides-per-view="3"
+    :space-between="10"
+    :centered-slides="true"
+    class="w-full h-full">
+    <swiper-slide v-for="item in 10" :key="item">
+        <img src="../assets/img/01.jpg" class="w-full h-full" alt="">
+    </swiper-slide>
+  </swiper>
+      </div>
       <!-- 中间的电影名称 -->
       <ul class="flex flex-col items-center py-[10px] leading-6">
         <li class=" font-bold flex items-center">
@@ -41,6 +51,10 @@ import { ref,inject } from 'vue';
 import { useRoute } from 'vue-router';
 import API from "../utils/API/index.js";
 import {formatDateTime} from "../utils/dataTimeUtils";
+// 导入swiper
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/css";
+
 
 const route = useRoute();
 const baseURL = inject("baseURL");
@@ -48,8 +62,6 @@ const baseURL = inject("baseURL");
 
 //定义一个变量，保存电影
 const planInfo = ref([]);
-
-console.log(route.query.id);
 
 const queryData = ()=>{
     API.planInfo.getListByMid(route.query.id)
@@ -72,5 +84,35 @@ queryData();
 <style scoped lang="scss">
 .btn-buy {
   @apply text-[12px] text-primaryColor border-primaryColor border-solid border w-[50px] h-[28px] rounded-[14px] bg-white;
+}
+
+.swiper-container {
+  width: 100%;
+  height: 100%;
+}
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  transition: 300ms;
+  transform: scale(0.8);
+}
+.swiper-slide-active,
+.swiper-slide-duplicate-active {
+  transform: scale(1);
 }
 </style>
