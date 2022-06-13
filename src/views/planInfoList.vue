@@ -1,0 +1,76 @@
+<template>
+  <page-view class="flex flex-col">
+    <title-bar :show-back="true">电影排片</title-bar>
+    <div class="content-box flex-1 overflow-auto">
+      <!--轮播图的盒子 -->
+      <div class="swiper-box h-[150px] bg-gradient-to-tr from-gray-500 to-gray-900"></div>
+      <!-- 中间的电影名称 -->
+      <ul class="flex flex-col items-center py-[10px] leading-6">
+        <li class=" font-bold flex items-center">
+          你好，标哥
+          <div class=" text-warningColor ml-[5px]">8.0<span class="text-[12px]">分</span>
+          </div>
+        </li>
+        <li class="text-[12px] text-gray-400 tracking-wide">
+          147分钟|动作|标哥哥,帅哥,小杨哥
+        </li>
+      </ul>
+      <!-- 当前电影的排片列表 -->
+      <ul class="px-[10px]">
+        <li v-for="item in planInfo" :key="item.id"
+         class="flex p-[5px] h-[50px] items-center border-0 border-b border-dashed border-gray-400">
+          <div class="w-[80px] text-[14px]">
+            {{formatDateTime(item.plan_time,"YYYY-MM-DD HH:mm:ss")}}
+          </div>
+          <div class="w-[120px] text-[12px] text-gray-700">
+            {{item.hallInfo.tags}}
+          </div>
+          <div class="flex-1 text-primaryColor">￥{{item.price}}</div>
+          <div class="w-[60px]">
+            <button type="button" class="btn-buy">购票</button>
+          </div>
+        </li>
+        
+      </ul>
+    </div>
+  </page-view>
+</template>
+<script setup>
+import titleBar from "../components/title-bar.vue";
+import { ref,inject } from 'vue';
+import { useRoute } from 'vue-router';
+import API from "../utils/API/index.js";
+import {formatDateTime} from "../utils/dataTimeUtils";
+
+const route = useRoute();
+const baseURL = inject("baseURL");
+
+
+//定义一个变量，保存电影
+const planInfo = ref([]);
+
+console.log(route.query.id);
+
+const queryData = ()=>{
+    API.planInfo.getListByMid(route.query.id)
+    .then((result)=>{
+    if(result.status=="success"){
+        console.log(result.data)
+        planInfo.value = result.data;
+    }else {
+        //服务器返回数据失败
+        console.log("获取数据失败");
+    }
+}).finally(()=>{
+    })
+};
+queryData();
+
+
+
+</script>
+<style scoped lang="scss">
+.btn-buy {
+  @apply text-[12px] text-primaryColor border-primaryColor border-solid border w-[50px] h-[28px] rounded-[14px] bg-white;
+}
+</style>

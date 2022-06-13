@@ -8,7 +8,8 @@
                 <div class="flex h-[120px] p-[5px]" v-for="item in resultData.listData" :key="item.id"
                 @click="toMovieDetail(item.id)">
                     <div class="w-[95px]">
-                        <img @click="ImagePreview([baseURL+item.movie_pc])" class="w-full h-full" :src="baseURL+item.movie_pc" alt="">
+                        <!-- 阻止事件冒泡stopPropage -->
+                        <img @click.stop="ImagePreview([baseURL+item.movie_pc])" class="w-full h-full" :src="baseURL+item.movie_pc" alt="">
                     </div>
                     <ul class="flex flex-col flex-1 justify-between text-[12px] list-none px-[10px]">
                         <li class="text-[18pxs] font-bold">{{item.movie_name}}</li>

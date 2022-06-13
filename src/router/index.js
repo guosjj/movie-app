@@ -64,6 +64,11 @@ const router = createRouter({
             path: "/movieDetail",
             component: ()=>import("../views/movieDetail.vue"),
             name: "movieDetail"
+        },
+        {
+            path: "/planInfoList",
+            component: ()=>import("../views/planInfoList.vue"),
+            name: "planInfoList"
         }
     ],
 });
