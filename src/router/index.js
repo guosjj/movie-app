@@ -69,6 +69,11 @@ const router = createRouter({
             path: "/planInfoList",
             component: ()=>import("../views/planInfoList.vue"),
             name: "planInfoList"
+        },
+        {
+            path: "/chooseSite",
+            component: ()=>import("../views/chooseSite.vue"),
+            name: "chooseSite"
         }
     ],
 });

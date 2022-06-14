@@ -27,7 +27,7 @@
       </ul>
       <!-- 当前电影的排片列表 -->
       <ul class="px-[10px]">
-        <li v-for="item in planInfo" :key="item.id"
+        <li v-for="item in planInfoList" :key="item.id"
          class="flex p-[5px] h-[50px] items-center border-0 border-b border-dashed border-gray-400">
           <div class="w-[80px] text-[14px]">
             {{formatDateTime(item.plan_time,"YYYY-MM-DD HH:mm:ss")}}
@@ -37,7 +37,7 @@
           </div>
           <div class="flex-1 text-primaryColor">￥{{item.price}}</div>
           <div class="w-[60px]">
-            <button type="button" class="btn-buy">购票</button>
+            <button type="button" class="btn-buy" @click="toChooseSite(item.id)">购票</button>
           </div>
         </li>
         
@@ -48,7 +48,7 @@
 <script setup>
 import titleBar from "../components/title-bar.vue";
 import { ref,inject } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute,useRouter } from 'vue-router';
 import API from "../utils/API/index.js";
 import {formatDateTime} from "../utils/dataTimeUtils";
 // 导入swiper
@@ -57,28 +57,34 @@ import "swiper/css";
 
 
 const route = useRoute();
+const router = useRouter();
 const baseURL = inject("baseURL");
 
 
 //定义一个变量，保存电影
-const planInfo = ref([]);
+const planInfoList = ref([]);
 
 const queryData = ()=>{
     API.planInfo.getListByMid(route.query.id)
     .then((result)=>{
     if(result.status=="success"){
-        console.log(result.data)
-        planInfo.value = result.data;
+        planInfoList.value = result.data;
     }else {
         //服务器返回数据失败
         console.log("获取数据失败");
     }
-}).finally(()=>{
-    })
+})
 };
 queryData();
 
-
+const toChooseSite = (id)=>{
+  router.push({
+    name:"chooseSite",
+    query:{
+            id:id
+        }
+  })
+}
 
 </script>
 <style scoped lang="scss">
