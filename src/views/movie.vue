@@ -6,7 +6,7 @@
             华夏影院
             <!-- #right插入到一个name为right的具名插槽 -->
             <template #right>
-                <img src="../assets/img/menu.svg" alt="" />
+                <img src="../assets/img/menu.svg" @click="show = true" alt="" />
             </template>
         </title-bar>
         <!-- 分类盒子 -->
@@ -23,7 +23,8 @@
                 <p class=" text-gray-700 text-[12px] py-[5px]">最受好评的电影</p>
                 <div class="praise-list flex overflow-auto">
                     <!-- 每一项的电影信息 -->
-                    <div class="w-[90px] praise-item flex-shrink-0" v-for="item in praiseMovieList" :key="item.id">
+                    <div class="w-[90px] praise-item flex-shrink-0" v-for="item in praiseMovieList" :key="item.id"
+                    @click="toMovieDetail(item.id)">
                         <div class="h-[110px] relative">
                             <img class=" w-full h-full" :src="baseURL + item.movie_pc" alt="">
                             <p class="text-yellow-500 text-[12px] absolute bottom-[2px] left-[8px] font-bold">
@@ -35,6 +36,11 @@
             </div>
             <hot-movie-list></hot-movie-list>
         </div>
+        <van-action-sheet v-model:show="show"
+                          :actions="actions"
+                          cancel-text="取消"
+                          close-on-click-action
+                          @select="onSelect"/>
     </page-view>
 </template>
 
@@ -43,14 +49,23 @@ import titleBar from "../components/title-bar.vue";
 import { ref, reactive, inject } from "vue";
 import API from "../utils/API/index.js";
 import hotMovieList from "../components/hotMovieList.vue"
+import { useRouter } from "vue-router";
 //定义一个数组
-const typeTagList = reactive(["热映", "影院", "待映", "经典电影"]);
+const typeTagList = reactive(["热映", "待映", "经典电影"]);
 const typeTagIndex = ref(0);
 
 //定义一个变量，用于保存最受欢迎的电影
 const praiseMovieList = ref([]);
+
 //注入全局参数
 const baseURL = inject("baseURL");
+
+//获取路由管理对象
+const router = useRouter();
+//是否显示登录
+const show = ref(false);
+
+const actions = [{ name: '登录账号'}];
 
 API.movieInfo.getPraiseMovie().then((result) => {
     if (result.status == "success") {
@@ -64,7 +79,21 @@ API.movieInfo.getPraiseMovie().then((result) => {
 
 });
 
-
+const toMovieDetail = (id)=>{
+    router.push({
+        name:'movieDetail',
+        query:{
+            id:id
+        }
+    });
+};         
+const onSelect = (item) => {
+      if(item.name=="登录账号"){
+        router.push({
+            name:'login'
+        });
+      }
+    };
 </script>
 
 <style scoped lang="scss">

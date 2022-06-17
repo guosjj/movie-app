@@ -25,6 +25,9 @@
           147分钟|动作|标哥哥,帅哥,小杨哥
         </li>
       </ul>
+      <!-- 默认情况是没有数据的 -->
+      <van-empty description="暂无电影排片" v-if="planInfoList.length==0">   
+      </van-empty>
       <!-- 当前电影的排片列表 -->
       <ul class="px-[10px]">
         <li v-for="item in planInfoList" :key="item.id"
@@ -39,9 +42,9 @@
           <div class="w-[60px]">
             <button type="button" class="btn-buy" @click="toChooseSite(item.id)">购票</button>
           </div>
-        </li>
-        
+        </li>        
       </ul>
+      
     </div>
   </page-view>
 </template>
@@ -69,6 +72,7 @@ const queryData = ()=>{
     .then((result)=>{
     if(result.status=="success"){
         planInfoList.value = result.data;
+        console.log(planInfoList.value);
     }else {
         //服务器返回数据失败
         console.log("获取数据失败");

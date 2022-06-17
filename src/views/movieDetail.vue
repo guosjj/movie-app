@@ -42,8 +42,6 @@ const isLoading = ref(true);
 //定义一个变量，保存电影
 const movieDetail = ref(null);
 
-console.log(route.query.id);
-
 const queryData = ()=>{
     isLoading.value=true;
     API.movieInfo.getMovieById(route.query.id)
