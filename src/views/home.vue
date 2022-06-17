@@ -1,8 +1,12 @@
 <template>
     <div class="home-page">
         <div class="content-box">
-            <!-- 根据路由显示不同页面 -->
-            <router-view></router-view>
+            <!-- 根据路由显示不同页面 问题是如何缓存这个虚拟页面-->
+            <router-view v-slot="{Component}">
+                <keep-alive>
+                    <component :is="Component"></component>
+                </keep-alive>
+            </router-view>
         </div>
         <div class="tab-bar">
             <router-link :to="{name:'movie'}" active-class="selected"> 

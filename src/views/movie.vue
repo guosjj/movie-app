@@ -6,15 +6,15 @@
             华夏影院
             <!-- #right插入到一个name为right的具名插槽 -->
             <template #right>
-                <img src="../assets/img/menu.svg" />
+                <img src="../assets/img/menu.svg" alt="" />
             </template>
         </title-bar>
         <!-- 分类盒子 -->
         <ul class="type-tag bg-white">
             <li v-for="(item, index) in typeTagList" :key="index" :class="{ active: typeTagIndex == index }"
                 @click="typeTagIndex = index">{{ item }}</li>
-            <li class="right-search-icon">
-                <img src="../assets/img/search.svg" />
+            <li class="right-search-icon" >
+                <img src="../assets/img/search.svg" @click="$router.push({name:'search'})"/>
             </li>
         </ul>
         <!-- 剩下的空间全部给下面的盒子 -->
