@@ -22,6 +22,14 @@ const movieInfo ={
     },
     getMovieById(id){
         return axiosInstance.get("/movie-info/findById/"+id)
+    },
+    search({pageIndex,keyword}){
+        return axiosInstance.get(`/movie-info/search`,{
+            params:{
+                pageIndex,
+                keyword
+            }
+        })
     }
 }
 
