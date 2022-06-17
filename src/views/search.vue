@@ -65,12 +65,20 @@ const quertData = ()=>{
 
 const onClickButton = () => {
     queryParams.keyword=value.value;
-    quertData();
+    if(queryParams.keyword==''){
+        Toast('请输入内容');
+    }else{
+        quertData();
+    }
 };
 
 const onSearch = () => {
     queryParams.keyword=value.value;
-    quertData();
+    if(queryParams.keyword==''){
+        Toast('请输入内容');
+    }else{
+        quertData();
+    }
 };
 
 const toMovieDetail = (id)=>{
