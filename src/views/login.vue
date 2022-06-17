@@ -1,27 +1,39 @@
 <template>
     <page-view class="flex flex-col">
         <title-bar :show-back="true">登录</title-bar>
-        <form action="" class="flex flex-col items-center p-[15px]">
-            <div class="w-full border-0 border-b border-solid border-gray-100 py-[10px]"> 
-                <label class="inline-block w-[100px] text-gray-600 text-[15px]">手机号</label>   
-                <input class="border-0 placeholder-gray-300" type="text" placeholder="用户名" />
+        <van-form>
+            <van-cell-group inset>
+                <van-field autocomplete="false" v-model="phone" name="手机号" label="手机号" placeholder="手机号"
+                    :rules="[{ validator: asyncValidator, message: '请填写手机号' }]" />
+                <van-field autocomplete="false" v-model="password" type="password" name="密码" label="密码" placeholder="密码"
+                    :rules="[{ validator: asyncValidator, message: '请填写密码' }]" />
+            </van-cell-group>
+            <div style="margin: 16px;">
+                <van-button class="border-0 bg-primaryColor" round block type="primary" native-type="submit">
+                    登录
+                </van-button>
             </div>
-            <div class="w-full border-0 border-b border-solid border-gray-100 py-[10px]"> 
-                <label class="inline-block w-[100px] text-gray-600 text-[15px]">密码</label>     
-                <input class="border-0 placeholder-gray-300" type="password" placeholder="密码" />
-            </div> 
-            <div class="w-full h-[30px] mx-[10px] my-[15px] rounded-[15px] cursor-pointer 
-            active:bg-successColor bg-primaryColor flex flex-col justify-center text-center text-white">
-                登录
-            </div>
-        </form>
+        </van-form>
     </page-view>
 </template>
 <script setup>
 import titleBar from '../components/title-bar.vue';
+import { ref } from 'vue';
+import { Toast } from 'vant';
+const phone = ref('');
+const password = ref('');
 
+const asyncValidator = (val) =>
+      new Promise((resolve) => {
+    if (phone.value == '' || password.value == '') {
+        Toast("请填写完整信息");
+    }   
+        resolve(val !== '');
+        // setTimeout(() => {
+        //   resolve(val !== '');
+        // }, 1000);
+      });
 
 </script>
 <style scoped>
-
 </style>
