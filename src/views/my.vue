@@ -16,11 +16,11 @@
             <div class="mt-[10px]">
                 <div class="van-cell van-cell--clickable" role="button" tabindex="0">
                     <div class="van-cell__title"><span>我的订单</span></div>
-                    <i class="van-badge__wrapper van-icon van-icon-arrow van-cell__right-icon"></i>
+                    <i class=" van-icon van-icon-arrow"></i>
                 </div>
                 <div class="van-cell van-cell--clickable" role="button" tabindex="0">
                     <div class="van-cell__title"><span>退出登录</span></div>
-                    <i class="van-badge__wrapper van-icon van-icon-arrow van-cell__right-icon"></i>
+                    <i class=" van-icon van-icon-arrow"></i>
                 </div>
             </div>
         </div>

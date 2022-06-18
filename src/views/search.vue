@@ -1,7 +1,8 @@
 <template>
     <page-view class="flex flex-col">
         <form action="/">
-            <van-search v-model="value" background="#F7504D" shape="round" show-action @search="onSearch"
+            <van-search
+                v-model="value" background="#F7504D" shape="round" show-action @search="onSearch"
                 placeholder="请输入关键字">
                 <template #left>
                     <img src="../assets/img/left-arrow.svg" class="mr-[10px]" @click="$router.back()" />
@@ -60,17 +61,18 @@ const searchData = reactive({
 
 const queryData = () => {
     isLoading.value = true;
+    //点击收缩时将页码变为1，不然拉到下面时再点击搜索会有bug
+    queryParams.pageIndex=1;
     API.movieInfo.search(queryParams).then(result => {
-        console.log(result.data.listData)
+        //console.log(result.data.listData)
         if (result.data.listData.length == 0) {
             Toast('暂无数据');
         } else {
-            searchData.listData = searchData.listData.concat(result.data.listData);
-            //searchData.listData = result.data.listData;
+            //searchData.listData = searchData.listData.concat(result.data.listData);
+            searchData.listData = result.data.listData;
             searchData.pageCount = result.data.pageCount;
         }
-    })
-        .finally(() => {
+    }).finally(() => {
             //数据请求完了，就把加载状态取消
             isLoading.value = false;
         });
@@ -97,8 +99,15 @@ const onSearch = () => {
 const loadNextPage = () => {
     //第一步把页码加1
     queryParams.pageIndex++;
-    //第二步：再次调用方法，查询数据
-    queryData();
+    //第二步：只有向下拉的时候使用concat包裹数据
+        isLoading.value = true;
+        API.movieInfo.search(queryParams).then(result => {
+        searchData.listData = searchData.listData.concat(result.data.listData);
+        searchData.pageCount = result.data.pageCount;  
+    }).finally(() => {
+            //数据请求完了，就把加载状态取消
+            isLoading.value = false;
+        });
 }
 
 const toMovieDetail = (id) => {
