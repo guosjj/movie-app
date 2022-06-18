@@ -1,13 +1,8 @@
 <template>
     <page-view class="flex flex-col">
         <form action="/">
-            <van-search
-            v-model="value"
-            background="#F7504D"
-            shape="round"
-            show-action
-            @search="onSearch"
-            placeholder="请输入关键字">
+            <van-search v-model="value" background="#F7504D" shape="round" show-action @search="onSearch"
+                placeholder="请输入关键字">
                 <template #left>
                     <img src="../assets/img/left-arrow.svg" class="mr-[10px]" @click="$router.back()" />
                 </template>
@@ -16,24 +11,33 @@
                 </template>
             </van-search>
         </form>
-        
-        <div class="content-box flex-1 overflow-auto">
+
+
+        <div class="content-box flex-1 overflow-auto bg-gray-100">
             <!-- 默认情况是没有数据的 -->
-            <van-empty description="暂无数据" v-if="searchData.length==0"></van-empty>  
-            <div class="box">
-                    <div class="relative" v-for="item in searchData" :key="item.id"
-                    @click="toMovieDetail(item.id)">
+            <van-empty description="暂无数据" v-if="searchData.listData.length == 0"></van-empty>
+            <van-list 
+                v-model:loading="isLoading" 
+                loading-text="正在加载电影数据"
+                @load="loadNextPage" 
+                :finished="queryParams.pageIndex >= searchData.pageCount">
+                <div class="box">
+                    <div class="bg-white w-[110px] h-[140px] pb-[20px] p-[5px] relative"
+                        v-for="item in searchData.listData" :key="item.id" @click="toMovieDetail(item.id)">
                         <img class="w-full h-full" :src="baseURL + item.movie_pc" />
-                        <p class="text-yellow-500 text-[12px] absolute bottom-[2px] left-[8px] font-bold">
-                                观众评分{{ item.movie_score }}</p>
+                        <p class=" text-warningColor text-[12px] p-[5px] absolute bottom-[20px] left-[8px] font-bold">
+                            观众评分: {{ item.movie_score }}</p>
+                        <p class="text-[12px] left-[8px] font-bold">
+                            {{ item.movie_name }}</p>
                     </div>
-            </div>            
+                </div>
+            </van-list>
         </div>
     </page-view>
 </template>
 <script setup>
-import { Search,Toast } from 'vant';
-import { reactive,ref,inject } from 'vue';
+import { Search, Toast } from 'vant';
+import { reactive, ref, inject } from 'vue';
 import API from '../utils/API';
 import { useRouter } from "vue-router";
 
@@ -45,60 +49,77 @@ const value = ref('');
 const router = useRouter();
 
 const queryParams = reactive({
-    pageIndex:"1",
-    keyword:"",
+    pageIndex: 1,
+    keyword: "",
+});
+const isLoading = ref(false);
+const searchData = reactive({
+    listData: [],
+    pageCount: 0
 });
 
-const searchData = ref([]);
-
-const quertData = ()=>{
-    API.movieInfo.search(queryParams).then(result=>{
+const queryData = () => {
+    isLoading.value = true;
+    API.movieInfo.search(queryParams).then(result => {
         console.log(result.data.listData)
-        if(result.data.listData.length==0){
+        if (result.data.listData.length == 0) {
             Toast('暂无数据');
-        }else{
-        searchData.value=result.data.listData
-        //console.log(searchData.value)
-        }   
+        } else {
+            searchData.listData = searchData.listData.concat(result.data.listData);
+            //searchData.listData = result.data.listData;
+            searchData.pageCount = result.data.pageCount;
+        }
     })
+        .finally(() => {
+            //数据请求完了，就把加载状态取消
+            isLoading.value = false;
+        });
 }
 
 const onClickButton = () => {
-    queryParams.keyword=value.value;
-    if(queryParams.keyword==''){
+    queryParams.keyword = value.value;
+    if (queryParams.keyword == '') {
         Toast('请输入内容');
-    }else{
-        quertData();
+    } else {
+        queryData();
     }
 };
 
 const onSearch = () => {
-    queryParams.keyword=value.value;
-    if(queryParams.keyword==''){
+    queryParams.keyword = value.value;
+    if (queryParams.keyword == '') {
         Toast('请输入内容');
-    }else{
-        quertData();
+    } else {
+        queryData();
     }
 };
 
-const toMovieDetail = (id)=>{
+const loadNextPage = () => {
+    //第一步把页码加1
+    queryParams.pageIndex++;
+    //第二步：再次调用方法，查询数据
+    queryData();
+}
+
+const toMovieDetail = (id) => {
     router.push({
-        name:'movieDetail',
-        query:{
-            id:id
+        name: 'movieDetail',
+        query: {
+            id: id
         }
     });
 };
 </script>
 <style scoped>
-        .box{
-            padding: 5px;
-            box-sizing: border-box;
-            width: 100%;
-            height: 100%;
-            display: grid;
-            grid-template-columns: repeat(3,1fr);
-            grid-gap: 5px;
+.box {
+    padding: 5px;
+    text-align: center;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 3px 3px;
 
-        }
+}
 </style>
