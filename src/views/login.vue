@@ -4,7 +4,7 @@
         <van-form>
             <van-cell-group inset>
                 <van-field autocomplete="false" v-model="phone" name="手机号" label="手机号" placeholder="手机号"
-                    :rules="[{ validator: asyncValidator, message: '请填写手机号' }]" />
+                    :rules="[{ validator, message: validatorMessage }]" />
                 <van-field autocomplete="false" v-model="password" type="password" name="密码" label="密码" placeholder="密码"
                     :rules="[{ validator: asyncValidator, message: '请填写密码' }]" />
             </van-cell-group>
@@ -18,21 +18,24 @@
 </template>
 <script setup>
 import titleBar from '../components/title-bar.vue';
-import { ref } from 'vue';
+import {  ref } from 'vue';
 import { Toast } from 'vant';
 const phone = ref('');
 const password = ref('');
 
+const validator = (val) => /1\d{10}/.test(val);
+const validatorMessage = ref();
+
 const asyncValidator = (val) =>
-      new Promise((resolve) => {
-    if (phone.value == '' || password.value == '') {
-        Toast("请填写完整信息");
-    }   
+    new Promise((resolve) => {
         resolve(val !== '');
-        // setTimeout(() => {
-        //   resolve(val !== '');
-        // }, 1000);
-      });
+        if (phone.value == '' || password.value == '') {
+            Toast("请填写完整信息");
+        }
+        validatorMessage.value = (phone.value == '' ? '请填写手机号' : '请填写正确的手机号');
+    });
+
+
 
 </script>
 <style scoped>
