@@ -2,7 +2,7 @@
     <page-view class="flex flex-col">
         <form action="/">
             <van-search
-                v-model="value" background="#F7504D" shape="round" show-action @search="onSearch"
+                v-model="value" background="#F7504D" shape="round" show-action @search="onSearch" 
                 placeholder="请输入关键字">
                 <template #left>
                     <img src="../assets/img/left-arrow.svg" class="mr-[10px]" @click="$router.back()" />
@@ -12,7 +12,6 @@
                 </template>
             </van-search>
         </form>
-
 
         <div class="content-box flex-1 overflow-auto bg-gray-100">
             <!-- 默认情况是没有数据的 -->
@@ -130,5 +129,8 @@ const toMovieDetail = (id) => {
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 3px 3px;
 
+}
+:deep(.van-search__action:active){
+    background-color: transparent;
 }
 </style>
